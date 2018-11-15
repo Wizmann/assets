@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="http://intgraph.qiniudn.com/static/bootstrap3/js/jquery.min.js"></script>
+        <script src="http://intgraph.qiniudn.com/static/bootstrap3/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://intgraph.qiniudn.com/static/bootstrap3/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="http://intgraph.qiniudn.com/static/bootstrap3/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href="http://intgraph.qiniudn.com/static/pygments.css"/>
+        <title>
+Problems - IntGraph
+</title>
+        
+<script src="http://intgraph.qiniudn.com/static/buckets-minified.js"></script>
+<script src="http://intgraph.qiniudn.com/static/angular.min.js"></script>
+<script>
+var IgApp = angular.module('IgApp', [], function($interpolateProvider) {
+  $interpolateProvider.startSymbol('{$');
+  $interpolateProvider.endSymbol('$}');
+});
+
+var uniqueItems = function (data, key) {
+    var result = new buckets.Set()
+    for (var i = 0; i < data.length; i++) {
+        var tags = data[i][key];
+        for (var idx in tags) {
+            result.add(tags[idx]);
+        }
+    }
+    return result.toArray();
+};
+
+function IgCtrl($scope, filterFilter) {
+    
+    $scope.usedifficulty = {};
+    
+    $scope.usecategories = {};
+    
+    $scope.usesource = {};
+    
+
+    $scope.articles = [
+        
+        {"source": ["codeforces", "51nod"], "url": "Problems/best-team.html", "title": "Best Team", "difficulty": ["4"], "date": "2015-10-28 01:47:30", "categories": ["monotone"]},
+        
+        {"source": ["mitbbs"], "url": "Problems/fastest-way-to-divide-7.html", "title": "Fastest way to divide 7", "difficulty": ["4"], "date": "2015-10-24 22:40:14", "categories": ["bit manipulation"]},
+        
+        {"source": ["vintage"], "url": "Problems/random-sampling.html", "title": "Random Sampling", "difficulty": ["3"], "date": "2015-10-18 01:29:55", "categories": ["random"]},
+        
+        {"source": ["unknown"], "url": "Problems/min-queue.html", "title": "MinQueue", "difficulty": ["4"], "date": "2015-10-14 10:01:22", "categories": ["monotone"]},
+        
+        {"source": ["51nod"], "url": "Problems/friends-and-enemies.html", "title": "Friends and Enemies", "difficulty": ["4"], "date": "2015-10-05 20:58:33", "categories": ["disjoint-set", "heuristic algorithm"]},
+        
+        {"source": ["cc150"], "url": "Problems/lost-number-2.html", "title": "lost number - 2", "difficulty": ["3.5"], "date": "2015-09-22 23:49:35", "categories": ["radix sort", "in-place algorithm"]},
+        
+        {"source": ["Leetcode"], "url": "Problems/wiggle-sort.html", "title": "Wiggle Sort", "difficulty": ["3"], "date": "2015-09-22 01:52:25", "categories": ["implementation", "induction"]},
+        
+        {"source": ["51nod"], "url": "Problems/non-overlaped-segments.html", "title": "Non-overlaped segments", "difficulty": ["3"], "date": "2015-09-19 20:14:46", "categories": ["sorting", "stack"]},
+        
+        {"source": ["anonymous"], "url": "Problems/mst-rebuild.html", "title": "MST Rebuild", "difficulty": ["4"], "date": "2015-09-05 15:44:33", "categories": ["MST"]},
+        
+        {"source": ["unknown"], "url": "Problems/suvivor.html", "title": "Survivor", "difficulty": ["3.5"], "date": "2015-09-04 00:26:11", "categories": ["sort", "bit manipulation"]},
+        
+        {"source": ["Algorithms: A Creative Approach"], "url": "Problems/search-for-a-special-index.html", "title": "Search for a Special Index", "difficulty": ["3"], "date": "2015-08-29 11:54:39", "categories": ["binary search"]},
+        
+        {"source": ["Leetcode"], "url": "Problems/verify-preorder-sequence-in-binary-search-tree.html", "title": "Verify Preorder Sequence in Binary Search Tree", "difficulty": ["2.5"], "date": "2015-08-15 14:18:29", "categories": ["tree"]},
+        
+        {"source": ["Leetcode", "Facebook", "linkedin"], "url": "Problems/painting-house.html", "title": "Painting House", "difficulty": ["3"], "date": "2015-08-15 13:33:08", "categories": ["dp"]},
+        
+        {"source": ["Facebook"], "url": "Problems/equal-range-in-a-bianry-search-tree.html", "title": "Equal Range in a Binary Search Tree", "difficulty": ["3.5"], "date": "2015-08-12 22:59:26", "categories": ["tree", "binary search tree"]},
+        
+        {"source": ["Facebook"], "url": "Problems/lower-bound-and-upper-bound-for-a-bst.html", "title": "Lower-bound & Upper-bound in a Binary Search Tree", "difficulty": ["3"], "date": "2015-08-10 22:35:35", "categories": ["implementation"]},
+        
+        {"source": ["anonymous"], "url": "Problems/palindrome-number.html", "title": "Palindrome Number", "difficulty": ["3"], "date": "2015-08-10 22:16:10", "categories": ["implementation"]},
+        
+        {"source": ["unknown"], "url": "Problems/k-cheapest-set-meals-2.html", "title": "K-Cheapest Set Meals - 2", "difficulty": ["3.5"], "date": "2015-08-04 00:05:52", "categories": ["sort", "merge sort"]},
+        
+        {"source": ["unknown"], "url": "Problems/k-cheapest-set-meals-1.html", "title": "K-Cheapest Set Meals - 1", "difficulty": ["2.5"], "date": "2015-08-03 23:30:24", "categories": ["sort", "merge sort"]},
+        
+        {"source": ["Facebook"], "url": "Problems/one-edit-distance-plus-plus.html", "title": "One Edit Distance++", "difficulty": ["4"], "date": "2015-07-22 09:49:39", "categories": ["implementation"]},
+        
+        {"source": ["Leetcode"], "url": "Problems/one-edit-distance.html", "title": "One Edit Distance", "difficulty": ["3"], "date": "2015-07-22 01:22:01", "categories": ["implementation"]},
+        
+        {"source": ["anonymous"], "url": "Problems/card-shuffler.html", "title": "Card Shuffler", "difficulty": ["3.5"], "date": "2015-07-20 10:00:22", "categories": ["implementation"]},
+        
+        {"source": ["Facebook"], "url": "Problems/3-sum-plus-plus.html", "title": "3-Sum++", "difficulty": ["2.5"], "date": "2015-07-19 17:35:12", "categories": ["implementation"]},
+        
+        {"source": ["Facebook"], "url": "Problems/print-all-paths-from-root-to-leaves.html", "title": "Print All Paths from Root to Leaves", "difficulty": ["3.5"], "date": "2015-07-17 00:36:00", "categories": ["binary tree"]},
+        
+        {"source": ["Leetcode", "anonymous"], "url": "Problems/fraction-to-recurring-decimal.html", "title": "Fraction to Recurring Decimal", "difficulty": ["3.5"], "date": "2015-07-16 01:09:00", "categories": ["math"]},
+        
+        {"source": ["mitbbs", "anonymous"], "url": "Problems/random-deque.html", "title": "Random Deque", "difficulty": ["4"], "date": "2015-07-09 09:33:05", "categories": ["deque", "induction"]},
+        
+        {"source": ["Lintcode"], "url": "Problems/subarray-sum-with-pos-integer-numbers.html", "title": "Subarray Sum with Positive Integer Numbers", "difficulty": ["4"], "date": "2015-07-04 23:24:17", "categories": ["two-pointers"]},
+        
+        {"source": ["51nod"], "url": "Problems/the-pairs-of-separating-circles.html", "title": "The pairs of separating circles", "difficulty": ["3"], "date": "2015-07-04 17:05:53", "categories": ["sorting"]},
+        
+        {"source": ["Lintcode"], "url": "Problems/lowest-common-ancestor-1.html", "title": "Lowest Common Ancestor - 1", "difficulty": ["3"], "date": "2015-06-25 00:14:46", "categories": ["binary tree", "lca", "tree"]},
+        
+        {"source": ["codeforces"], "url": "Problems/sum-of-negative-binary-numbers-2.html", "title": "The Sum of Negative Binary Number - 2", "difficulty": ["3.5"], "date": "2015-06-20 11:38:11", "categories": ["simulation", "math"]},
+        
+        {"source": ["Facebook", "mitbbs"], "url": "Problems/m-largest-number-in-an-array.html", "title": "M-largest Number in an Array", "difficulty": ["3"], "date": "2015-06-18 23:26:48", "categories": ["radix sort"]},
+        
+        {"source": ["Lintcode"], "url": "Problems/kth-smallest-number-in-sorted-matrix.html", "title": "Kth Smallest Number in Sorted Matrix", "difficulty": ["2.5"], "date": "2015-06-11 01:06:01", "categories": ["merge sort", "priority queue"]},
+        
+        {"source": ["anonymous"], "url": "Problems/rand-gen-with-a-blacklist.html", "title": "Random Generator with a Blacklist", "difficulty": ["4"], "date": "2015-05-17 00:40:38", "categories": ["binary search", "hash", "thinking in reverse"]},
+        
+        {"source": ["unknown"], "url": "Problems/to-xor-or-not-to-xor-2.html", "title": "To xor or not to xor - 2", "difficulty": ["3"], "date": "2015-05-02 12:56:44", "categories": ["xor", "trie"]},
+        
+        {"source": ["sgu"], "url": "Problems/to-xor-or-not-to-xor.html", "title": "To xor or not to xor", "difficulty": ["4"], "date": "2015-04-30 23:29:13", "categories": ["xor", "matrix", "Gaussian Elimination"]},
+        
+        {"source": ["Leetcode", "tencent"], "url": "Problems/binary-tree-inorder-traversal.html", "title": "Binary Tree Inorder Traversal", "difficulty": ["3.5"], "date": "2015-04-26 20:11:01", "categories": ["tree"]},
+        
+        {"source": ["openjudge"], "url": "Problems/square-number.html", "title": "Square Number", "difficulty": ["3"], "date": "2015-04-13 09:28:47", "categories": ["math"]},
+        
+        {"source": ["Facebook", "geeksforgeeks"], "url": "Problems/binary-tree-verticality-traversal.html", "title": "Binary Tree Verticality Traversal", "difficulty": ["3"], "date": "2015-04-11 18:44:08", "categories": ["tree"]},
+        
+        {"source": ["codeforces"], "url": "Problems/milking-cows-2.html", "title": "Milking Cows - 2", "difficulty": ["3"], "date": "2015-04-10 22:48:01", "categories": ["greedy"]},
+        
+        {"source": ["anonymous", "mitbbs"], "url": "Problems/max-rectangle-in-the-matrix-1.html", "title": "Max Rectangle in the Matrix - 1", "difficulty": ["2.5"], "date": "2015-04-09 09:46:08", "categories": ["matrix"]},
+        
+        {"source": ["The Algorithm Design Manual"], "url": "Problems/milking-cows.html", "title": "Milking Cows", "difficulty": ["2.5"], "date": "2015-04-08 00:16:04", "categories": ["greedy", "interval", "sorting"]},
+        
+        {"source": ["linkedin"], "url": "Problems/nested-list-reversed-weighted-sum.html", "title": "Nested List Reversed Weighted Sum", "difficulty": ["1.5"], "date": "2015-03-07 23:04:36", "categories": ["dfs"]},
+        
+        {"source": ["unknown"], "url": "Problems/match-the-character-sets.html", "title": "Match the character sets", "difficulty": ["2"], "date": "2015-03-07 17:47:24", "categories": ["string", "hash table"]},
+        
+        {"source": ["Lintcode"], "url": "Problems/heapify.html", "title": "Heapify", "difficulty": ["3"], "date": "2015-03-06 00:39:41", "categories": ["heap"]},
+        
+        {"source": ["anonymous"], "url": "Problems/suffix-match.html", "title": "Max Suffix Match", "difficulty": ["4"], "date": "2015-02-20 22:30:36", "categories": ["kmp", "string"]},
+        
+        {"source": ["mitbbs"], "url": "Problems/smooth-number-3.html", "title": "3-Smooth Number", "difficulty": ["3"], "date": "2015-02-18 17:06:46", "categories": ["math"]},
+        
+        {"source": ["yahoo", "mitbbs"], "url": "Problems/random-0-1.html", "title": "Random with 0/1", "difficulty": ["3.5"], "date": "2015-02-10 17:38:03", "categories": ["bit manipulation", "random"]},
+        
+        {"source": ["mitbbs", "anonymous"], "url": "Problems/divide-number.html", "title": "Divide Number", "difficulty": ["2.5"], "date": "2014-12-17 00:31:19", "categories": ["math", "hash", "string"]},
+        
+        {"source": ["unknown"], "url": "Problems/poker-game.html", "title": "Poker Game", "difficulty": ["3"], "date": "2014-12-16 01:34:17", "categories": ["possibility", "expectation", "dp", "induction"]},
+        
+        {"source": ["Lintcode"], "url": "Problems/max-tree.html", "title": "Max Tree", "difficulty": ["4"], "date": "2014-12-13 20:57:41", "categories": ["tree", "stack"]},
+        
+        {"source": ["mitbbs", "anonymous"], "url": "Problems/interleaving-string-2.html", "title": "Interleaving String - 2", "difficulty": ["4"], "date": "2014-12-07 21:57:14", "categories": ["recursion"]},
+        
+        {"source": ["mitbbs", "anonymous"], "url": "Problems/minimal-difference-between-two-sorted-arrays.html", "title": "The Minimal Difference Between Two Sorted Arrays", "difficulty": ["2.5"], "date": "2014-11-24 00:19:47", "categories": ["array"]},
+        
+        {"source": ["zhihu"], "url": "Problems/multiset-number.html", "title": "Multiset Number", "difficulty": ["4.5"], "date": "2014-11-21 09:28:32", "categories": ["combinatorics"]},
+        
+        {"source": ["unknown"], "url": "Problems/gossip-day.html", "title": "Gossip Day", "difficulty": ["4.5"], "date": "2014-11-06 00:42:52", "categories": ["dp", "graph"]},
+        
+        {"source": ["mitbbs", "Facebook", "baidu", "vintage"], "url": "Problems/kth-element-in-an-unordered-array.html", "title": "Get the kth element in an unordered array", "difficulty": ["3.5"], "date": "2014-11-02 01:11:39", "categories": ["partition", "quick-sort"]},
+        
+        {"source": ["mitbbs"], "url": "Problems/find-the-brightest-star.html", "title": "Find the Brightest Star", "difficulty": ["3.5"], "date": "2014-10-30 09:42:39", "categories": ["mathmatical induction", "graph"]},
+        
+        {"source": ["Algorithms: A Creative Approach"], "url": "Problems/find-the-star.html", "title": "Find the Star", "difficulty": ["3.5"], "date": "2014-10-30 09:34:15", "categories": ["mathmatical induction", "graph"]},
+        
+        {"source": ["unknown"], "url": "Problems/sum-of-negative-binary-numbers.html", "title": "The Sum of Negative Binary Number", "difficulty": ["3.5"], "date": "2014-10-27 00:26:01", "categories": ["simulation", "math"]},
+        
+        {"source": ["Algorithms: A Creative Approach"], "url": "Problems/skyline-problem.html", "title": "Skyline Problem", "difficulty": ["4"], "date": "2014-10-01 23:07:29", "categories": ["segment-tree", "divide-and-conquer", "data structures"]},
+        
+        {"source": ["\u5f85\u5b57\u95fa\u4e2d"], "url": "Problems/partition-the-string-into-palindrome.html", "title": "partition the string into palindrome", "difficulty": ["3.5"], "date": "2014-09-16 14:18:00", "categories": ["palindrome", "dp"]},
+        
+        {"source": ["\u5f85\u5b57\u95fa\u4e2d"], "url": "Problems/lost-number-1.html", "title": "lost number - 1", "difficulty": ["3"], "date": "2014-09-15 23:23:47", "categories": ["radix sort", "in-place algorithm"]},
+        
+        {"source": ["unknown"], "url": "Problems/maximum-minimal-array.html", "title": "maximum minimal array", "difficulty": ["3.5"], "date": "2014-09-14 11:06:05", "categories": ["sort", "STL", "thinking in reverse"]},
+        
+        {"source": ["unknown"], "url": "Problems/continuous-sequence-sum-to-zero.html", "title": "continuous sequence sum to zero", "difficulty": ["3"], "date": "2014-09-13 15:12:18", "categories": ["hash"]},
+        
+        {"source": ["unknown"], "url": "Problems/mediation-of-a-data-flow.html", "title": "mediation of a data flow", "difficulty": ["3"], "date": "2014-09-13 10:21:31", "categories": ["priority-queue"]},
+        
+        {"source": ["hduoj"], "url": "Problems/maximum-sum-4.html", "title": "maximum sum - 4", "difficulty": ["4"], "date": "2014-09-11 13:43:00", "categories": ["dp"]},
+        
+        {"source": ["hduoj", "baidu"], "url": "Problems/maximum-sum-3.html", "title": "maximum sum - 3", "difficulty": ["3.5"], "date": "2014-09-11 00:20:32", "categories": ["dp"]},
+        
+        {"source": ["POJ", "baidu"], "url": "Problems/maximum-sum-2.html", "title": "maximum sum - 2", "difficulty": ["3.5"], "date": "2014-09-10 23:30:17", "categories": ["dp"]},
+        
+        {"source": ["baidu", "hduoj"], "url": "Problems/maximum-sum-1.html", "title": "maximum sum - 1", "difficulty": ["3"], "date": "2014-09-10 23:11:37", "categories": ["dp"]},
+        
+        {"source": ["geeksforgeeks", "amazon"], "url": "Problems/rearrange-array-3.html", "title": "Rearrange array in alternating positive & negative items - 3", "difficulty": ["3.5"], "date": "2014-09-10 09:44:23", "categories": ["implementation"]},
+        
+        {"source": ["geeksforgeeks"], "url": "Problems/rearrange-array-2.html", "title": "Rearrange array in alternating positive & negative items - 2", "difficulty": ["3"], "date": "2014-09-10 09:42:49", "categories": ["implementation"]},
+        
+        {"source": ["geeksforgeeks"], "url": "Problems/rearrange-array-1.html", "title": "Rearrange array in alternating positive & negative items - 1", "difficulty": ["2.5"], "date": "2014-09-10 08:01:26", "categories": ["partition", "implementation"]},
+        
+        {"source": ["unknown"], "url": "Problems/alphabetic-encoding.html", "title": "Alphabetic Encoding", "difficulty": ["2.5"], "date": "2014-09-06 23:56:26", "categories": ["dfs", "implementation"]},
+        
+        {"source": ["\u5f85\u5b57\u95fa\u4e2d"], "url": "Problems/divide-and-multiply-a-number.html", "title": "Divide and multiply a number", "difficulty": ["3.5"], "date": "2014-09-03 08:48:00", "categories": ["math"]},
+        
+        {"source": ["\u5f85\u5b57\u95fa\u4e2d"], "url": "Problems/string-to-palindrome.html", "title": "String to Palindrome", "difficulty": ["3.5"], "date": "2014-09-01 16:05:00", "categories": ["string", "dp", "dfs", "loop invariant"]},
+        
+        {"source": ["\u5f85\u5b57\u95fa\u4e2d"], "url": "Problems/number-of-power-pairs.html", "title": "Number of Power Pairs", "difficulty": ["3.5"], "date": "2014-09-01 08:41:01", "categories": ["sort", "math"]},
+        
+        {"source": ["Aha Insight"], "url": "Problems/a-sticky-gum-problem.html", "title": "A sticky gum problem", "difficulty": ["2"], "date": "2014-08-31 15:52:53", "categories": ["thinking in reverse"]},
+        
+        {"source": ["baidu"], "url": "Problems/ip-to-location.html", "title": "IP to location", "difficulty": ["2.5"], "date": "2014-08-27 23:14:09", "categories": ["hash", "data structures"]},
+        
+        {"source": ["Algorithms: A Creative Approach"], "url": "Problems/paint-a-map.html", "title": "Paint a map", "difficulty": ["4"], "date": "2014-08-24 16:46:01", "categories": ["proof", "constructive"]},
+        
+        {"source": ["codeforces"], "url": "Problems/watering-flowers.html", "title": "Watering Flowers", "difficulty": ["4"], "date": "2014-08-22 16:00:00", "categories": ["binary search", "greedy", "binary indexed tree"]},
+        
+        {"source": ["codeforces"], "url": "Problems/little-dima-and-equation.html", "title": "Little Dima and Equation", "difficulty": ["2.5"], "date": "2014-08-21 14:57:00", "categories": ["implementation"]},
+        
+        {"source": ["geeksforgeeks", "POJ"], "url": "Problems/connect-n-ropes-with-minimum-cost.html", "title": "Connect n ropes with minimum cost", "difficulty": ["2.5"], "date": "2014-08-19 11:03:00", "categories": ["priority-queue", "huffman coding", "heap"]},
+        
+        {"source": ["codeforces"], "url": "Problems/no-friends-on-the-bus.html", "title": "No friends on the bus", "difficulty": ["4"], "date": "2014-08-18 23:02:26", "categories": ["constructive", "combinatorics"]},
+        
+        {"source": ["Hacker's Delight"], "url": "Problems/flp2-and-clp2.html", "title": "Rounding Up/Down to the Next Power of 2", "difficulty": ["4.5"], "date": "2014-08-17 10:55:28", "categories": ["bit manipulation"]},
+        
+        {"source": ["unknown"], "url": "Problems/command-within-the-same-shell.html", "title": "Command Within The Same Shell", "difficulty": ["1"], "date": "2014-08-16 18:46:00", "categories": ["pipeline", "shell"]},
+        
+        {"source": ["Leetcode", "itint5", "anonymous"], "url": "Problems/interleaving-string.html", "title": "Interleaving String", "difficulty": ["3"], "date": "2014-08-16 17:14:25", "categories": ["dp"]},
+        
+        {"source": ["itint5", "anonymous"], "url": "Problems/multiple-to-be-all-ones.html", "title": "Multiple to be all ones", "difficulty": ["3"], "date": "2014-08-16 15:58:00", "categories": ["math"]},
+        
+        {"source": ["itint5", "baidu"], "url": "Problems/copy-a-single-linked-list-with-a-random-pointer.html", "title": "Copy a singly linked list with a random pointer", "difficulty": ["4"], "date": "2014-08-16 14:44:58", "categories": ["linked-list", "implementation"]},
+        
+        {"source": ["POJ", "qunar"], "url": "Problems/web-navigation.html", "title": "Web Navigation", "difficulty": ["2"], "date": "2014-08-15 16:46:00", "categories": ["simulation", "implementation", "no algorithm", "STL"]},
+        
+        {"source": ["POJ"], "url": "Problems/bad-hair-day.html", "title": "Bad Hair Day", "difficulty": ["3"], "date": "2014-08-14 11:01:00", "categories": ["stack", "monotone", "thinking in reverse"]},
+        
+        {"source": ["unknown"], "url": "Problems/only-once-in-the-array.html", "title": "All Twice Excpet One", "difficulty": ["2"], "date": "2014-08-13 23:14:00", "categories": ["bit manipulation"]},
+        
+    ];
+
+    $scope.$watch(function () {
+        return {
+            articles: $scope.articles,
+            
+            usedifficulty: $scope.usedifficulty,
+            
+            usecategories: $scope.usecategories,
+            
+            usesource: $scope.usesource,
+            
+        }
+    }, function (value) {
+        var selected;
+        $scope.count = function (prop, value) {
+            return function (el) {
+                return el[prop] == value;
+            };
+        };
+        var filterAfterAll = $scope.articles;
+        var filterAfterThis = [];
+        
+        console.log(filterAfterAll);
+        $scope.difficultyGroup = uniqueItems($scope.articles, 'difficulty');
+        selected = false;
+        filterAfterThis = [];
+        for (var j in filterAfterAll) {
+            var p = filterAfterAll[j];
+            for (var i in $scope.usedifficulty) {
+                if ($scope.usedifficulty[i]) {
+                    selected = true;
+                    console.log(i, p.difficulty);
+                    console.log(p.difficulty.indexOf(i) != -1);
+                    if (p.difficulty.indexOf(i) != -1) {
+                        filterAfterThis.push(p);
+                        break;
+                    }
+                }
+            }
+        }
+        console.log("difficulty", filterAfterThis, filterAfterAll, selected);
+        if (!selected) {
+            filterAfterThis = filterAfterAll;
+            $scope.filteredArticles = filterAfterThis;
+        }
+        filterAfterAll = filterAfterThis;
+        
+        console.log(filterAfterAll);
+        $scope.categoriesGroup = uniqueItems($scope.articles, 'categories');
+        selected = false;
+        filterAfterThis = [];
+        for (var j in filterAfterAll) {
+            var p = filterAfterAll[j];
+            for (var i in $scope.usecategories) {
+                if ($scope.usecategories[i]) {
+                    selected = true;
+                    console.log(i, p.categories);
+                    console.log(p.categories.indexOf(i) != -1);
+                    if (p.categories.indexOf(i) != -1) {
+                        filterAfterThis.push(p);
+                        break;
+                    }
+                }
+            }
+        }
+        console.log("categories", filterAfterThis, filterAfterAll, selected);
+        if (!selected) {
+            filterAfterThis = filterAfterAll;
+            $scope.filteredArticles = filterAfterThis;
+        }
+        filterAfterAll = filterAfterThis;
+        
+        console.log(filterAfterAll);
+        $scope.sourceGroup = uniqueItems($scope.articles, 'source');
+        selected = false;
+        filterAfterThis = [];
+        for (var j in filterAfterAll) {
+            var p = filterAfterAll[j];
+            for (var i in $scope.usesource) {
+                if ($scope.usesource[i]) {
+                    selected = true;
+                    console.log(i, p.source);
+                    console.log(p.source.indexOf(i) != -1);
+                    if (p.source.indexOf(i) != -1) {
+                        filterAfterThis.push(p);
+                        break;
+                    }
+                }
+            }
+        }
+        console.log("source", filterAfterThis, filterAfterAll, selected);
+        if (!selected) {
+            filterAfterThis = filterAfterAll;
+            $scope.filteredArticles = filterAfterThis;
+        }
+        filterAfterAll = filterAfterThis;
+        
+        $scope.filteredArticles = filterAfterAll;
+        console.log(filterAfterThis, filterAfterAll);
+    }, true);
+
+    $scope.$watch('filtered', function (newValue) {
+        if (angular.isArray(newValue)) {
+            console.log(newValue.length);
+        }
+    }, true);
+}
+
+IgApp.filter('groupBy',
+    function () {
+        return function (collection, key) {
+            if (collection === null) return;
+            return uniqueItems(collection, key);
+        };
+    });
+
+</script>
+
+    </head>
+    <body ng-app="IgApp">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/index.html">IntGraph</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    
+                    <li>
+                        <a href="/index.html">Problems</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/System Design.html">System Design</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/Object Orinted Design.html">Object Orinted Design</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/Contribute.html">Contribute</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/About.html">About</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            
+<div ng-controller="IgCtrl">
+    <h1>Problems</h1>
+    <br/>
+    <div class="row">
+        <div class="col-md-10">
+            <table class="table">
+                <thead> <tr>
+                <th>#</th>
+                <th>Problem</th>
+                <th>Add time</th>
+                </tr> </thead>
+                <tbody>
+                <tr ng-repeat="article in filteredArticles | filter:query">
+                    <td> {$ $index + 1 $} </td>
+                    <td> <a href="{$ article.url $}"> {$ article.title $} </a></td>
+                    <td> {$ article.date $} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    
+        <div class="col-md-2">
+            <h2> Filters </h2>
+            <br/>
+            <div class="form-group">
+                <label class="sr-only" for="igsearch">Search</label>
+                <input type="text" class="form-control" id="igsearch" placeholder="Search" ng-model="query.title">
+            </div>
+            
+            
+            <h3>
+            <span class="label label-info">difficulty</span>
+            </h3>
+                <p></p>
+                <div class="checkbox" ng-repeat="difficulty in difficultyGroup | orderBy:'toString()'">
+                    <label>
+                        <input type="checkbox" ng-model="usedifficulty[difficulty]"/>
+                        {$ difficulty $}
+                    </label>
+                </div>
+            
+            <h3>
+            <span class="label label-info">categories</span>
+            </h3>
+                <p></p>
+                <div class="checkbox" ng-repeat="categories in categoriesGroup | orderBy:'toString()'">
+                    <label>
+                        <input type="checkbox" ng-model="usecategories[categories]"/>
+                        {$ categories $}
+                    </label>
+                </div>
+            
+            <h3>
+            <span class="label label-info">source</span>
+            </h3>
+                <p></p>
+                <div class="checkbox" ng-repeat="source in sourceGroup | orderBy:'toString()'">
+                    <label>
+                        <input type="checkbox" ng-model="usesource[source]"/>
+                        {$ source $}
+                    </label>
+                </div>
+            
+        </div>
+    </div>
+</div>
+
+
+        </div>
+        <hr/>
+        <footer class="bs-footer" role="contentinfo">
+            <div class="container">
+                <p>Powered by IntGraph</p>
+                <p>This page is generated at 2015-10-28 01:48:39 CST.</p>
+                <p>Designed and built by <a href="http://wizmann.tk">Wizmann</a>. <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253045810'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253045810%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></p>
+            </div>
+        </footer>
+
+         
+         
+        <style> div.container img { max-width: 100%; } </style>
+        
+    </body>
+</html>
